@@ -76,3 +76,17 @@ function show_errors($form_errors_array){
     $errors .= "</ul></p>";
     return $errors;
 }
+
+/**
+ * @param $message
+ * @param string $passOrFail
+ * @return string
+ */
+function flashMessage($message, $passOrFail = 'Fail'){
+    if($passOrFail === 'Pass'){
+        $data = "<div class='alert alert-success'>{$message}</p>";
+    }else{
+        $data = "<div class='alert alert-danger alert-success'>{$message}</p>";
+    }
+    return $data;
+}

@@ -46,26 +46,39 @@ if(isset($_POST['loginBtn'])){
 }
 ?>
 
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title>Login Page</title>
-</head>
-<body>
-<h2>User Authentication System </h2><hr>
+<?php
+$page_title = "User Authentication System - Login Page";
+include_once 'partials/headers.php';
+?>
+<div class="container">
+    <section class="col col-lg-7">
+        <h2>Login Form </h2><hr>
 
-<h3>Login Form</h3>
+        <?php if(isset($result)) echo $result; ?>
+        <?php if(!empty($form_errors)) echo show_errors($form_errors); ?>
 
-<?php if(isset($result)) echo $result; ?>
-<?php if(!empty($form_errors)) echo show_errors($form_errors); ?>
-<form method="post" action="">
-    <table>
-        <tr><td>Username:</td> <td><input type="text" value="" name="username"></td></tr>
-        <tr><td>Password:</td> <td><input type="password" value="" name="password"></td></tr>
-        <tr><td><a href="forgot_password.php">Forgot Password?</a></td><td><input style="float: right;" type="submit" name="loginBtn" value="Signin"></td></tr>
-    </table>
-</form>
-<p><a href="index.php">Back</a> </p>
+        <form method="post" action="">
+            <div class="form-group">
+                <label for="usernameField">Username</label>
+                <input type="text" class="form-control" name="username" id="usernameField" placeholder="Username">
+            </div>
+            <div class="form-group">
+                <label for="passwordField">Password</label>
+                <input type="password" class="form-control" name="password" id="passwordField" placeholder="Password">
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="remember"> 记住密码
+                </label>
+            </div>
+            <a href="forgot_password.php" >Forgot Password?</a>
+            <button type="submit" class="btn btn-primary pull-right" name="loginBtn">登录</button>
+        </form>
+
+    </section>
+    <p><a href="index.php">Back</a> </p>
+</div>
+
+<?php include_once 'partials/footers.php'; ?>
 </body>
 </html>
