@@ -1,6 +1,7 @@
 <?php
 //add our database connection script
 include_once 'resource/Database.php';
+include_once 'resource/utilities.php';
 
 //process the form
 if(isset($_POST['signupBtn'])){
@@ -10,12 +11,17 @@ if(isset($_POST['signupBtn'])){
     //Form validation
     $required_fields = array('email', 'username', 'password');
 
-    //loop through the required fields array snd popular the form error array 
-    foreach($required_fields as $name_of_field){
-        if(!isset($_POST[$name_of_field]) || $_POST[$name_of_field] == NULL){
-            $form_errors[] = $name_of_field . " is a required field";
-        }
-    }
+    //call the function to check empty field and merge the return data into form_error array
+    $form_errors = array_merge($form_errors, check_empty_fields($required_fields));
+
+    //Fields that requires checking for minimum length
+    $fields_to_check_length = array('username' => 4, 'password' => 6);
+
+    //call the function to check minimum required length and merge the return data into form_error array
+    $form_errors = array_merge($form_errors, check_min_length($fields_to_check_length));
+
+    //email validation / merge the return data into form_error array
+    $form_errors = array_merge($form_errors, check_email($_POST));
 
     //check if error array is empty, if yes process form data and insert record
     if(empty($form_errors)){
@@ -40,32 +46,17 @@ if(isset($_POST['signupBtn'])){
 
             //check if one new row was created
             if($statement->rowCount() == 1){
-                $result = "<p style='padding:20px; color: green;'> Registration Successful</p>";
+                $result = "<p style='padding:20px; border: 1px solid gray; color: green;'> Registration Successful</p>";
             }
         }catch (PDOException $ex){
-            $result = "<p style='padding:20px; color: red;'> An error occurred: ".$ex->getMessage()."</p>";
+            $result = "<p style='padding:20px; border: 1px solid gray; color: red;'> An error occurred: ".$ex->getMessage()."</p>";
         }
     }
     else{
         if(count($form_errors) == 1){
             $result = "<p style='color: red;'> There was 1 error in the form<br>";
-
-            $result .= "<ul style='color: red;'>";
-            //loop through error array and display all items
-            foreach($form_errors as $error){
-                $result .= "<li> {$error} </li>";
-            }
-            $result .= "</ul></p>";
-
         }else{
             $result = "<p style='color: red;'> There were " .count($form_errors). " errors in the form <br>";
-
-            $result .= "<ul style='color: red;'>";
-            //loop through error array and display all items
-            foreach($form_errors as $error){
-                $result .= "<li> {$error}</li>";
-            }
-            $result .= "</ul></p>";
         }
     }
 
@@ -84,7 +75,7 @@ if(isset($_POST['signupBtn'])){
 <h3>Registration Form</h3>
 
 <?php if(isset($result)) echo $result; ?>
-
+<?php if(!empty($form_errors)) echo show_errors($form_errors); ?>
 <form method="post" action="">
     <table>
         <tr><td>Email:</td> <td><input type="text" value="" name="email"></td></tr>
