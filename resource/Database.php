@@ -12,10 +12,10 @@ try {
     //设置pdo异常模式
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     //显示连接成功信息
-    echo "连接数据库成功！";
+    //echo "连接数据库成功！";
 } catch (Exception $ex) {
     //显示连接失败信息
-    echo "连接数据库失败！".$ex->getMessage();
+    //echo "连接数据库失败！".$ex->getMessage();
 }
 
 

@@ -1,4 +1,6 @@
 <?php include_once 'resource/session.php' ?>
+<?php include_once 'resource/Database.php' ?>
+<?php include_once 'resource/utilities.php' ?>
 <!DOCTYPE html>
 <html>
 <head lang="en">
@@ -12,6 +14,9 @@
 
     <!-- custom css -->
     <link href="css/custom.css" rel="stylesheet">
+
+    <script src="js/sweetalert.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/sweetalert.css">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -33,15 +38,15 @@
             <a class="navbar-brand" href="index.php">用户系统</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="index.php">Home</a></li>
-                <?php if(!isset($_SESSION['username'])): ?>
-                    <li><a href="#">用户资料</a></li>
+            <ul class="nav navbar-nav"><i class="hide"><?php echo guard(); ?></i>
+                <li><a href="index.php">Home</a></li>
+                <?php if((isset($_SESSION['username']) || isCookieValid($db))): ?>
+                    <li><a href="profile">用户资料</a></li>
                     <li><a href="logout.php">退出</a></li>
                 <?php else: ?>
                     <li><a href="#about">About</a></li>
-                    <li><a href="login.php">登录/a></li>
-                    <li><a href="signup.php">About</a></li>
+                    <li><a href="login.php">登录</a></li>
+                    <li><a href="signup.php">注册</a></li>
                     <li><a href="#contact">Contact</a></li>
                 <?php endif ?>
             </ul>
